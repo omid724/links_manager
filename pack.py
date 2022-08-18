@@ -328,7 +328,7 @@ def store_all_links():
     df["URL"] = urls
 
     df["URL"] = df["URL"].apply(make_lower_case_protocol_and_domain_part)
-    df["URL"] = df["URL"].apply(remove_protocol_part_of_url)
+    # df["URL"] = df["URL"].apply(remove_protocol_part_of_url)
     df["URL"] = df["URL"].apply(lambda x: x[:-1] if x[-1] == "/" else x)
 
     filt = df.duplicated()
