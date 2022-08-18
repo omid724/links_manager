@@ -1,0 +1,16 @@
+        In the name of God
+
+        Welcome to LINKS MANAGER
+
+        Put all of your text file in "busy_files_links" folder. These files if contain links
+    we try to find links and manage them.
+
+    SELECT ONE OF OPTIONS.
+
+    (1) Make first table, pure domain table and total table from exist links in "Data/busy_files_links" folder, in
+    any text file.
+    (2) Delete previous first table -because find links in previous runs again use if you not need them, delete
+    find links earlier.
+    (3)
+    (4)
+    (5)
