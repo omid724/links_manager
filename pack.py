@@ -288,7 +288,7 @@ def find_pure_url(url):
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
     res_url = re.findall(r'^.+?\..+?/', url)
     res_url = res_url[0] if len(res_url) else url
-    res_url = remove_protocol_part_of_url(res_url)
+    _, res_url = remove_protocol_part_of_url(res_url)
 
     res_url = res_url.replace("/", "")
 
