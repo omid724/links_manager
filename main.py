@@ -4,7 +4,7 @@
 from pack import config_finder_constructor
 from pack import interface
 from pack import logger_constructor
-from pack import store_all_links
+from pack import make_first_table
 from pack import make_pure_url_table
 from pack import delete_first_table
 
@@ -16,7 +16,7 @@ def main():
     select = interface()
 
     if select == 1:
-        store_all_links()
+        make_first_table()
         make_pure_url_table()
     elif select == 2:
         delete_first_table()

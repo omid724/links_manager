@@ -10,10 +10,10 @@ import subprocess
 from configparser import ConfigParser
 
 import pandas as pd
+# import webbrowser
 
 from title_finder import titleBug5
 
-# import webbrowser
 
 protocol_part_of_an_url = ['https://www.', 'https://', 'http://www.', 'http://', "www."]
 
@@ -288,9 +288,9 @@ def find_pure_url(url):
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
     res_url = re.findall(r'^.+?\..+?/', url)
     res_url = res_url[0] if len(res_url) else url
-    _, res_url = remove_protocol_part_of_url(res_url)
+    # _, res_url = remove_protocol_part_of_url(res_url)
 
-    res_url = res_url.replace("/", "")
+    res_url = remove_last_forward_slash(res_url)
 
     return res_url
 
@@ -320,7 +320,7 @@ def make_lower_case_protocol_and_domain_part(url):
     return res_url
 
 
-def store_all_links():
+def make_first_table():
     output = config["Application"]["first_table"]
     urls = get_all_urls_from_input_links_folder()
 
