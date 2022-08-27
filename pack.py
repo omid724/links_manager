@@ -342,14 +342,18 @@ def make_first_table():
     return df
 
 
-# TODO change the name of this func to "make main domain address table"
-def make_pure_url_table():
+def make_domains_table():
     output = config["Application"]["pure_domain_table"]
-
     source_table = config["Application"]["first_table"]
+
     if os.path.isfile(source_table):
         df = pd.read_csv(source_table, index_col="Unnamed: 0")
-        # TODO - iterrate on urls and make two columns for save both protocol part and pure domain
+        df.insert(loc=1, column=["protocol_part"], value="NA")
+        df.insert(loc=1, column=["pure_domain"], value="NA")
+
+        for index, row in df.iterrows():
+            pass
+
         df["URL"] = df["URL"].apply(find_pure_url)
 
         filt = df.duplicated()

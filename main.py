@@ -5,7 +5,7 @@ from pack import config_finder_constructor
 from pack import interface
 from pack import logger_constructor
 from pack import make_first_table
-from pack import make_pure_url_table
+from pack import make_domains_table
 from pack import delete_first_table
 
 logger = logger_constructor(__name__)
@@ -17,7 +17,7 @@ def main():
 
     if select == 1:
         make_first_table()
-        make_pure_url_table()
+        make_domains_table()
     elif select == 2:
         delete_first_table()
 
