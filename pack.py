@@ -288,11 +288,9 @@ def find_pure_url(url):
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
     res_url = re.findall(r'^.+?\..+?/', url)
     res_url = res_url[0] if len(res_url) else url
-    # _, res_url = remove_protocol_part_of_url(res_url)
+    protocol_part, res_url = remove_protocol_part_of_url(res_url)
 
-    res_url = remove_last_forward_slash(res_url)
-
-    return res_url
+    return protocol_part, res_url
 
 
 def interface():
@@ -329,7 +327,8 @@ def make_first_table():
 
     df["URL"] = df["URL"].apply(make_lower_case_protocol_and_domain_part)
     # df["URL"] = df["URL"].apply(remove_protocol_part_of_url)
-    df["URL"] = df["URL"].apply(lambda x: x[:-1] if x[-1] == "/" else x)
+    df["URL"] = df["URL"].apply(remove_last_forward_slash)
+    df["URL"] = df["URL"].apply(lambda x: find_is_standard_url(remove_protocol_part_of_url(find_pure_url(x))))
 
     filt = df.duplicated()
     df.drop(index=df[filt].index, inplace=True)
@@ -343,12 +342,14 @@ def make_first_table():
     return df
 
 
+# TODO change the name of this func to "make main domain address table"
 def make_pure_url_table():
     output = config["Application"]["pure_domain_table"]
 
     source_table = config["Application"]["first_table"]
     if os.path.isfile(source_table):
         df = pd.read_csv(source_table, index_col="Unnamed: 0")
+        # TODO - iterrate on urls and make two columns for save both protocol part and pure domain
         df["URL"] = df["URL"].apply(find_pure_url)
 
         filt = df.duplicated()
