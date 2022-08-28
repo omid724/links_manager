@@ -366,6 +366,7 @@ def make_domains_table():
             df.loc[index, "protocol_part"] = protocol_part
             df.loc[index, "pure_domain"] = pure_domain
 
+        df["domain"] = df["domain"].apply(remove_last_forward_slash)
         df["pure_domain"] = df["pure_domain"].apply(remove_last_forward_slash)
 
         filt = df.duplicated()
