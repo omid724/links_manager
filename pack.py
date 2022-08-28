@@ -49,7 +49,7 @@ logger = logger_constructor(__name__)
 
 
 def find_is_standard_url(url):
-    pure_d = find_pure_url(url)
+    pure_d = find_domain(url)
     return find_is_standard_pure_domain(pure_d)
 
 
@@ -283,6 +283,15 @@ def remove_protocol_part_of_url(url):
     return protocol_part, res_url
 
 
+def find_domain(url):
+    url = url.lower()
+    # input shape: https://tarh.ir/golha/ ---> output shape: https://tarh.ir
+    res_url = re.findall(r'^.+?\..+?/', url)
+    res_url = res_url[0] if len(res_url) else url
+
+    return res_url
+
+
 def find_pure_url(url):
     url = url.lower()
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
@@ -309,7 +318,7 @@ def interface():
 
 def make_lower_case_protocol_and_domain_part(url):
     url_copy, res_url = url.lower(), url
-    domain = find_pure_url(url)
+    domain = find_domain(url)
     domain_place = url_copy.find(domain)
     if domain_place >= 0:
         tail_place = domain_place + len(domain)
@@ -326,9 +335,7 @@ def make_first_table():
     df["URL"] = urls
 
     df["URL"] = df["URL"].apply(make_lower_case_protocol_and_domain_part)
-    # df["URL"] = df["URL"].apply(remove_protocol_part_of_url)
     df["URL"] = df["URL"].apply(remove_last_forward_slash)
-    df["URL"] = df["URL"].apply(lambda x: find_is_standard_url(remove_protocol_part_of_url(find_pure_url(x))))
 
     filt = df.duplicated()
     df.drop(index=df[filt].index, inplace=True)
@@ -343,36 +350,41 @@ def make_first_table():
 
 
 def make_domains_table():
-    output = config["Application"]["pure_domain_table"]
     source_table = config["Application"]["first_table"]
+    output_table = config["Application"]["domains_table"]
 
     if os.path.isfile(source_table):
         df = pd.read_csv(source_table, index_col="Unnamed: 0")
-        df.insert(loc=1, column=["protocol_part"], value="NA")
-        df.insert(loc=1, column=["pure_domain"], value="NA")
+        df.insert(loc=1, column="protocol_part", value="NA")
+        df.insert(loc=2, column="pure_domain", value="NA")
+
+        df["URL"] = df["URL"].apply(find_domain)
+        df.rename(columns={"URL": "domain"}, inplace=True)
 
         for index, row in df.iterrows():
-            pass
+            protocol_part, pure_domain = remove_protocol_part_of_url(row["domain"])
+            df.loc[index, "protocol_part"] = protocol_part
+            df.loc[index, "pure_domain"] = pure_domain
 
-        df["URL"] = df["URL"].apply(find_pure_url)
+        df["pure_domain"] = df["pure_domain"].apply(remove_last_forward_slash)
 
         filt = df.duplicated()
         df.drop(index=df[filt].index, inplace=True)
 
-        filt = df["URL"].apply(find_is_standard_pure_domain)
+        filt = df["pure_domain"].apply(find_is_standard_pure_domain)
         df.drop(index=df[~filt].index, inplace=True)
 
-        filt = df["URL"].apply(contain_random_string)
+        filt = df["pure_domain"].apply(contain_random_string)
         df.drop(index=df[filt].index, inplace=True)
 
-        filt = df["URL"].apply(lambda x: len(x) > 60)
+        filt = df["pure_domain"].apply(lambda x: len(x) > 60)
         df.drop(index=df[filt].index, inplace=True)
 
-        df.sort_values(by="URL", ascending=True, inplace=True)
+        df.sort_values(by="pure_domain", ascending=True, inplace=True)
         df.reset_index(inplace=True)
         df.drop(columns="index", inplace=True)
 
-        df.to_csv(output)
+        df.to_csv(output_table)
 
         return df
 

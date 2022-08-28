@@ -20,6 +20,8 @@ def main():
         make_domains_table()
     elif select == 2:
         delete_first_table()
+    elif select == 6:
+        print("Bye!!!")
 
 
 if __name__ == "__main__":
