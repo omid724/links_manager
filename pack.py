@@ -390,6 +390,11 @@ def make_domains_table():
         return df
 
 
+def make_all_links_table():
+    pass
+
+
+# TODO
 def find_urls_title():
     pass
 
