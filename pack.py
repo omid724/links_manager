@@ -271,7 +271,7 @@ def find_is_standard_pure_domain(x):
     return result
 
 
-def remove_protocol_part_of_url(url):
+def split_protocol_part_of_url(url):
     url_copy, res_url = url.lower(), url
     for item in protocol_part_of_an_url:
         if url_copy.find(item) == 0:
@@ -297,7 +297,7 @@ def find_pure_url(url):
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
     res_url = re.findall(r'^.+?\..+?/', url)
     res_url = res_url[0] if len(res_url) else url
-    protocol_part, res_url = remove_protocol_part_of_url(res_url)
+    protocol_part, res_url = split_protocol_part_of_url(res_url)
 
     return protocol_part, res_url
 
@@ -362,7 +362,7 @@ def make_domains_table():
         df.rename(columns={"URL": "domain"}, inplace=True)
 
         for index, row in df.iterrows():
-            protocol_part, pure_domain = remove_protocol_part_of_url(row["domain"])
+            protocol_part, pure_domain = split_protocol_part_of_url(row["domain"])
             df.loc[index, "protocol_part"] = protocol_part
             df.loc[index, "pure_domain"] = pure_domain
 
