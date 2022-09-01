@@ -364,6 +364,9 @@ def make_domains_table():
 
     if os.path.isfile(source_table):
         df = pd.read_csv(source_table, index_col="Unnamed: 0")
+        # just use main column ("URL" column)
+        df = pd.DataFrame(df.iloc[:, 0])
+
         df.insert(loc=1, column="protocol_part", value="NA")
         df.insert(loc=2, column="pure_domain", value="NA")
 
