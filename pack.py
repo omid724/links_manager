@@ -344,6 +344,13 @@ def make_first_table():
     df.reset_index(inplace=True)
     df.drop(columns="index", inplace=True)
 
+    df.insert(loc=1, column="protocol_part", value="NA")
+    df.insert(loc=2, column="URL_without_protocol_part", value="NA")
+    for index, row in df.iterrows():
+        protocol_part, url_without_protocol_part = split_protocol_part_of_url(row["URL"])
+        df.loc[index, "protocol_part"] = protocol_part
+        df.loc[index, "URL_without_protocol_part"] = url_without_protocol_part
+
     df.to_csv(output)
 
     return df
