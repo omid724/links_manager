@@ -342,16 +342,16 @@ def make_first_table():
     filt = df.duplicated()
     df.drop(index=df[filt].index, inplace=True)
 
-    df.sort_values(by="URL", ascending=True, inplace=True)
-    df.reset_index(inplace=True)
-    df.drop(columns="index", inplace=True)
-
     df.insert(loc=1, column="protocol_part", value="NA")
     df.insert(loc=2, column="URL_without_protocol_part", value="NA")
     for index, row in df.iterrows():
         protocol_part, url_without_protocol_part = split_protocol_part_of_url(row["URL"])
         df.loc[index, "protocol_part"] = protocol_part
         df.loc[index, "URL_without_protocol_part"] = url_without_protocol_part
+
+    df.sort_values(by="URL_without_protocol_part", ascending=True, inplace=True)
+    df.reset_index(inplace=True)
+    df.drop(columns="index", inplace=True)
 
     df.to_csv(output)
 
@@ -368,32 +368,31 @@ def make_domains_table():
         df = pd.DataFrame(df.iloc[:, 0])
 
         df.insert(loc=1, column="protocol_part", value="NA")
-        df.insert(loc=2, column="pure_domain", value="NA")
+        df.insert(loc=2, column="URL_without_protocol_part", value="NA")
 
         df["URL"] = df["URL"].apply(find_domain)
-        df.rename(columns={"URL": "domain"}, inplace=True)
 
         for index, row in df.iterrows():
-            protocol_part, pure_domain = split_protocol_part_of_url(row["domain"])
+            protocol_part, pure_domain = split_protocol_part_of_url(row["URL"])
             df.loc[index, "protocol_part"] = protocol_part
-            df.loc[index, "pure_domain"] = pure_domain
+            df.loc[index, "URL_without_protocol_part"] = pure_domain
 
-        df["domain"] = df["domain"].apply(remove_last_forward_slash)
-        df["pure_domain"] = df["pure_domain"].apply(remove_last_forward_slash)
+        df["URL"] = df["URL"].apply(remove_last_forward_slash)
+        df["URL_without_protocol_part"] = df["URL_without_protocol_part"].apply(remove_last_forward_slash)
 
         filt = df.duplicated()
         df.drop(index=df[filt].index, inplace=True)
 
-        filt = df["pure_domain"].apply(find_is_standard_pure_domain)
+        filt = df["URL_without_protocol_part"].apply(find_is_standard_pure_domain)
         df.drop(index=df[~filt].index, inplace=True)
 
-        filt = df["pure_domain"].apply(contain_random_string)
+        filt = df["URL_without_protocol_part"].apply(contain_random_string)
         df.drop(index=df[filt].index, inplace=True)
 
-        filt = df["pure_domain"].apply(lambda x: len(x) > 60)
+        filt = df["URL_without_protocol_part"].apply(lambda x: len(x) > 60)
         df.drop(index=df[filt].index, inplace=True)
 
-        df.sort_values(by="pure_domain", ascending=True, inplace=True)
+        df.sort_values(by="URL_without_protocol_part", ascending=True, inplace=True)
         df.reset_index(inplace=True)
         df.drop(columns="index", inplace=True)
 
@@ -402,8 +401,20 @@ def make_domains_table():
         return df
 
 
-def make_all_links_table():
-    pass
+def make_all_links_table(df_first, df_domains):
+    # Arguments are two pandas dataframe that should bind to each other - df_first and df_domains
+
+    output = config["Application"]["all_urls_table"]
+    df = pd.concat([df_first, df_domains])
+
+    filt = df.duplicated()
+    df.drop(index=df[filt].index, inplace=True)
+    df.sort_values(by="URL_without_protocol_part", ascending=True, inplace=True)
+
+    df.reset_index(inplace=True)
+    # df.drop(columns="index", inplace=True)
+
+    df.to_csv(output)
 
 
 # TODO
