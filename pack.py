@@ -407,12 +407,15 @@ def make_all_links_table(df_first, df_domains):
     output = config["Application"]["all_urls_table"]
     df = pd.concat([df_first, df_domains])
 
+    df.reset_index(inplace=True)
+    df.drop(columns="index", inplace=True)
+
     filt = df.duplicated()
     df.drop(index=df[filt].index, inplace=True)
     df.sort_values(by="URL_without_protocol_part", ascending=True, inplace=True)
 
     df.reset_index(inplace=True)
-    # df.drop(columns="index", inplace=True)
+    df.drop(columns="index", inplace=True)
 
     df.to_csv(output)
 
