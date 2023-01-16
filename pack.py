@@ -147,7 +147,7 @@ def links_detector(file_path):
     """pass the function a file name,
     then you can have your all link in that file"""
 
-    with open(file_path, 'r') as file5:
+    with open(file_path, 'r', encoding='utf-8') as file5:
         total_file = file5.read()
 
     # https://gist.github.com/gruber/8891611
