@@ -172,7 +172,8 @@ def get_all_urls_from_input_links_folder():
         #     input()
         # else:
         #     pass
-        all_url_exist_in_links_folder += links_detector(input_links_path + "/" + file_name)
+        
+        all_url_exist_in_links_folder += links_detector(os.path.join(input_links_path, file_name))
 
     # Also add previous find links if exist file
     first_table_find_urls = config["Application"]["first_table"]
