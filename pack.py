@@ -128,10 +128,9 @@ def bookmark_url(url):
 
 def get_files_name_in_links_folder():
     input_links_path = config["Application"]["input_links_path"]
-    p1 = subprocess.run(['ls', input_links_path], capture_output=True, text=True, check=True)
-    filenames_in_links_folder = p1.stdout
-    filenames_in_links_folder = filenames_in_links_folder.split(sep='\n')
-    return filenames_in_links_folder[:-1]
+    filenames_in_links_folder = os.listdir(input_links_path)
+
+    return filenames_in_links_folder
 
 
 def clear():
