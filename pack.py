@@ -7,6 +7,7 @@ import logging
 import os
 import re
 import subprocess
+from time import sleep
 from configparser import ConfigParser
 
 import pandas as pd
@@ -29,14 +30,22 @@ def config_finder_constructor(path):
 
 config = config_finder_constructor('adjust.conf')
 
+def make_requierd_dir(path, folder):
+    requierd_dir = os.path.join(path, folder)
+    if not os.path.isdir(requierd_dir):
+        os.mkdir(requierd_dir)
+
+make_requierd_dir("", config["Logging"]["log_dir"])
+
 
 def logger_constructor(name_of_module):
     logger1 = logging.getLogger(name_of_module)
     logger1.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
-
-    file_handler = logging.FileHandler(config['Logging']['log_file'])
+    
+    log_file_path = os.path.join(config["Logging"]["log_dir"], config['Logging']['log_file'])
+    file_handler = logging.FileHandler(log_file_path)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
@@ -455,11 +464,3 @@ def delete_first_table():
 
     else:
         print("First table file doesn't exist")
-
-
-def make_requierd_dir(path, folder):
-    requierd_dir = os.path.join(path, folder)
-    if os.path.isdir(requierd_dir):
-        logger.debug(f"Already exist {requierd_dir} directory.")
-    else:
-        os.mkdir(requierd_dir)
