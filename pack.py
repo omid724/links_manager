@@ -135,6 +135,7 @@ def get_files_name_in_links_folder():
 
 def clear():
     """ Clear the screen"""
+    logger.info("Screen cleaned")
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
@@ -454,3 +455,11 @@ def delete_first_table():
 
     else:
         print("First table file doesn't exist")
+
+
+def make_requierd_dir(path, folder):
+    requierd_dir = os.path.join(path, folder)
+    if os.path.isdir(requierd_dir):
+        logger.debug(f"Already exist {requierd_dir} directory.")
+    else:
+        os.mkdir(requierd_dir)
