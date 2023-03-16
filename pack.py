@@ -169,24 +169,25 @@ def links_detector(file_path):
     return links
 
 
+# todo
+# def normalize_scv_tables(path):
+#     delimers = ["\t", ";", " "]
+#     df = pd.read_csv(path)
+
+
 def get_all_urls_from_input_links_folder():
     all_url_exist_in_links_folder = []
     file_names = get_files_name_in_links_folder()
-    input_links_path = config["Application"]["input_links_path"]
+    input_links_path = os.path.relpath(config["Application"]["input_dir"])
 
-    # TODO - if our file is csv file should have another approach, convert each cell
+    # TODO - if our file is csv file should have another approach
     for file_name in file_names:
-        # if file_name[-4:] == ".csv":
-        #     pd.read_csv(input_links_path + "/" + file_name)
-        #     print(input_links_path + "/" + file_name)
-        #     input()
-        # else:
-        #     pass
         
         all_url_exist_in_links_folder += links_detector(os.path.join(input_links_path, file_name))
 
     # Also add previous find links if exist file
-    first_table_find_urls = config["Application"]["first_table"]
+    first_table_find_urls = os.path.join(config["Application"]["input_dir"],
+                                         config["Application"]["first_table"])
     if os.path.isfile(first_table_find_urls):
         df = pd.read_csv(first_table_find_urls, index_col="Unnamed: 0")
         all_url_exist_in_links_folder += list(df.iloc[:, 0])
