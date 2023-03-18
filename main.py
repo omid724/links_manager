@@ -16,8 +16,11 @@ config = config_finder_constructor('adjust.conf')
 
 
 def main():
+    make_requierd_dir("", config["Application"]["main_data_dir"])
+    make_requierd_dir("", config["Application"]["input_dir"])
     make_requierd_dir("", config["Application"]["output_dir"])
     logger.info("--- START POINT ---")
+    
     select = interface()
 
     if select == 1:

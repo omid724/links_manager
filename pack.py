@@ -136,7 +136,7 @@ def bookmark_url(url):
 
 
 def get_files_name_in_links_folder():
-    input_links_path = config["Application"]["input_links_path"]
+    input_links_path = config["Application"]["input_dir"]
     filenames_in_links_folder = os.listdir(input_links_path)
 
     return filenames_in_links_folder
@@ -350,6 +350,7 @@ def make_lower_case_protocol_and_domain_part(url):
 
 def make_first_table():
     output = config["Application"]["first_table"]
+    output = os.path.join(config["Application"]["output_dir"], output)
     urls = get_all_urls_from_input_links_folder()
 
     df = pd.DataFrame()
@@ -379,7 +380,9 @@ def make_first_table():
 
 def make_domains_table():
     source_table = config["Application"]["first_table"]
+    source_table = os.path.join(config["Application"]["output_dir"], source_table)
     output_table = config["Application"]["domains_table"]
+    output_table = os.path.join(config["Application"]["output_dir"], output_table)
 
     if os.path.isfile(source_table):
         df = pd.read_csv(source_table, index_col="Unnamed: 0")
@@ -424,6 +427,8 @@ def make_all_links_table(df_first, df_domains):
     # Arguments are two pandas dataframe that should bind to each other - df_first and df_domains
 
     output = config["Application"]["all_urls_table"]
+    output = os.path.join(config["Application"]["output_dir"], output)
+
     df = pd.concat([df_first, df_domains])
 
     df.reset_index(inplace=True)
