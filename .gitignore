@@ -13,3 +13,4 @@ Untitled.ipynb
 *.kra~
 *.csv#
 Data/log/links_manager.log
+Data/output/
