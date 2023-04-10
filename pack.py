@@ -461,11 +461,12 @@ def ask_clint_yes_or_no(question):
 
 def delete_first_table():
     first_table = config["Application"]["first_table"]
+    first_table_path = os.path.join(config["Application"]["output_dir"], first_table)
 
-    if os.path.isfile(first_table):
+    if os.path.isfile(first_table_path):
         ans = ask_clint_yes_or_no("Are you sure to delete first table -previously find links? ")
         if ans:
-            os.remove(first_table)
+            os.remove(first_table_path)
         print("First table file deleted")
 
     else:
