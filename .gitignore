@@ -1,11 +1,9 @@
 .idea/
 __pycache__/
-.~lock.urls_info.csv#
 archive/
 archive/neat_links.csv
 urls_info.csv
 deactive_urls.txt
-dev/traffic_scraper_project.log
 dev/varlogwr_file.txt
 .ipynb_checkpoints/
 Untitled.ipynb
