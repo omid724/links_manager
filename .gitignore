@@ -1,7 +1,6 @@
 .idea/
 __pycache__/
-archive/
-archive/neat_links.csv
+trash/
 urls_info.csv
 deactive_urls.txt
 dev/varlogwr_file.txt
