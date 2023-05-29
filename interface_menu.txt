@@ -2,7 +2,7 @@
 
         Welcome to LINKS MANAGER
 
-        Put all of your text file in "busy_files_links" folder. These files if contain links
+        Put all of your text file in "Data -> input" folder. These files if contain links
     we try to find links and manage them.
 
     SELECT ONE OF OPTIONS.
