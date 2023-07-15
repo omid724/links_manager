@@ -1,0 +1,48 @@
+// In the name of God
+// protoc -I=. --python_out=. .\link.proto
+
+syntax = "proto3";
+
+package links;
+
+
+message link {
+
+    enum LINK_GROUP{
+        PEZESHKI = 0;
+        AB_VA_HAVA = 1;
+        MAZHABI = 2;
+        SAFA = 3;
+        VARZESHI = 4;
+        KOODAKAN = 5;
+        ABZAR = 6;
+        MAJALLAT_VA_ROOZNAME_HA = 7;
+        BAZI_HA = 8;
+        KHARID = 9;
+        SHABAKEH_EJTEMAEEI = 10;
+        
+        // "12": "salamati - سلامتی و تناسب اندام",
+        // "13": "daraeei - دارایی",
+        // "14": "karbordi - کاربردی",
+        // "15": "ghaza va nooshidani - غذا و نوشیدنی",
+        // "16": "marja - مرجع",
+        // "17": "akhbar - اخبار",
+        // "18": "amoozeshi - آموزشی",
+        // "19": "aks va video - عکس و ویدیو",
+        // "20": "sargarmi - سرگرمی",
+        // "21": "kotob - کتب",
+        // "22": "moosighi - موسیقی",
+        // "23": "kasb o kar - کسب و کار",
+        // "24": "jahat yabi - جهت یابی"
+         }
+  
+    string title = 1;
+    string address = 2;
+    int32 stars = 3;
+    int64 mobile = 4;
+    float base_ticket_price = 5;
+    bool drive_in = 6;
+    LINK_GROUP group = 7;
+    repeated string tag = 8;
+}
+ 
