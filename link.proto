@@ -12,37 +12,33 @@ message link {
         PEZESHKI = 0;
         AB_VA_HAVA = 1;
         MAZHABI = 2;
-        SAFA = 3;
+        SAFAR_VA_NAGHSHEH = 3;
         VARZESHI = 4;
         KOODAKAN = 5;
         ABZAR = 6;
         MAJALLAT_VA_ROOZNAME_HA = 7;
         BAZI_HA = 8;
         KHARID = 9;
-        SHABAKEH_EJTEMAEEI = 10;
-        
-        // "12": "salamati - سلامتی و تناسب اندام",
-        // "13": "daraeei - دارایی",
-        // "14": "karbordi - کاربردی",
-        // "15": "ghaza va nooshidani - غذا و نوشیدنی",
-        // "16": "marja - مرجع",
-        // "17": "akhbar - اخبار",
-        // "18": "amoozeshi - آموزشی",
-        // "19": "aks va video - عکس و ویدیو",
-        // "20": "sargarmi - سرگرمی",
-        // "21": "kotob - کتب",
-        // "22": "moosighi - موسیقی",
-        // "23": "kasb o kar - کسب و کار",
-        // "24": "jahat yabi - جهت یابی"
-         }
+        SHABAKEH_YE_EJTEMAEEI = 10;
+        SALAMATI = 11;
+        EGHTESAD = 12;
+        KHORAKEI = 13;
+        AKHBAR = 14;
+        AMOOZESHI = 15;
+        SOTEI_VA_TASVIREI = 16;
+        SARGARMEI = 17;
+        KETAB = 18;
+        KARAFARINI = 19;
+        }
   
     string title = 1;
-    string address = 2;
-    int32 stars = 3;
-    int64 mobile = 4;
-    float base_ticket_price = 5;
-    bool drive_in = 6;
+    string protocol_part = 2;
+    string total_domain_address = 3;
+    string subbranch_address = 4;
+    int32 stars = 5;
+    string visible_text_max_750_char = 6;
     LINK_GROUP group = 7;
+    // screenshots using selenium
     repeated string tag = 8;
+    bool is_home_page_or_domain =9;
 }
- 
