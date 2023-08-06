@@ -6,6 +6,12 @@ syntax = "proto3";
 package links;
 
 
+message image {
+    int32 width = 1;
+    int32 height = 2;
+    bytes image_data = 3;
+}
+
 message link {
 
     enum LINK_GROUP{
@@ -38,7 +44,7 @@ message link {
     int32 stars = 5;
     string visible_text_max_750_char = 6;
     LINK_GROUP group = 7;
-    // screenshots using selenium
-    repeated string tag = 8;
-    bool is_home_page_or_domain =9;
+    image screenshot = 8;
+    repeated string tag = 9;
+    bool is_home_page_or_domain =10;
 }
