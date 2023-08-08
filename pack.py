@@ -46,12 +46,7 @@ def logger_constructor(name_of_module):
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
-    terminal_handler = logging.StreamHandler()
-    terminal_handler.setLevel(logging.INFO)
-    terminal_handler.setFormatter(formatter)
-
     logger1.addHandler(file_handler)
-    logger1.addHandler(terminal_handler)
 
     return logger1
 
@@ -465,11 +460,6 @@ def make_all_links_table(df_first, df_domains):
     df.to_csv(output)
 
 
-# TODO
-def find_urls_title():
-    pass
-
-
 def ask_clint_yes_or_no(question):
     answer = ""
     while not ((answer in "yn") and (len(answer) == 1)):
@@ -493,8 +483,9 @@ def delete_first_table():
     else:
         print("First table file doesn't exist")
 
+# TODO --- make it complete
+def find_urls_all_need_context(link):
 
-def titleBug5(link):
     """pass the function a link to find its title for you"""
 
     headers = {}
