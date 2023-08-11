@@ -13,9 +13,6 @@ import requests
 import pandas as pd
 
 
-protocol_part_of_an_url = ['https://www.', 'https://', 'http://www.', 'http://', "www."]
-
-
 def config_finder_constructor(path):
     config_file = path
     config1 = ConfigParser()
@@ -309,15 +306,14 @@ def find_is_standard_pure_domain(x):
 
 
 def split_protocol_part_of_url(url):
-    url_copy, res_url = url.lower(), url
-    for item in protocol_part_of_an_url:
-        if url_copy.find(item) == 0:
-            res_url = url[len(item):]
-            break
+    splited_with_double_qute_url = url.split(":")
+    number_of_parts = len(splited_with_double_qute_url)
+    assert number_of_parts <= 2, f"Not a normal link passed. url: {url}"
 
-    protocol_part = url.split(res_url)[0]
+    protocol_part = splited_with_double_qute_url[0] if number_of_parts == 2 else ""
+    url_without_protocol = splited_with_double_qute_url[1] if number_of_parts == 2 else url
 
-    return protocol_part, res_url
+    return protocol_part, url_without_protocol
 
 
 def find_domain(url):
