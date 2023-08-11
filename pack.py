@@ -312,6 +312,7 @@ def split_protocol_part_of_url(url):
 
     protocol_part = splited_with_double_qute_url[0] if number_of_parts == 2 else ""
     url_without_protocol = splited_with_double_qute_url[1] if number_of_parts == 2 else url
+    url_without_protocol = url_without_protocol[2:] if "//" == url_without_protocol[:2] else url_without_protocol
 
     return protocol_part, url_without_protocol
 
