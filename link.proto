@@ -41,10 +41,11 @@ message link {
     string protocol_part = 2;
     string total_domain_address = 3;
     string subbranch_address = 4;
-    int32 stars = 5;
-    string visible_text_max_750_char = 6;
-    LINK_GROUP group = 7;
-    image screenshot = 8;
-    repeated string tag = 9;
-    bool is_home_page_or_domain =10;
+    map successful_access = 5;
+    int32 stars = 6;
+    string visible_text_max_750_char = 7;
+    LINK_GROUP group = 8;
+    image screenshot = 9;
+    repeated string tag = 10;
+    bool is_home_page_or_domain =11;
 }
