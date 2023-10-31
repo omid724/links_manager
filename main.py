@@ -12,7 +12,7 @@ from pack import delete_first_table
 
 
 logger = logger_constructor(__name__)
-config = config_finder_constructor('adjust.conf')
+config = config_finder_constructor("adjust.conf")
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     make_requierd_dir("", config["Application"]["input_dir"])
     make_requierd_dir("", config["Application"]["output_dir"])
     logger.info("--- START POINT ---")
-    
+
     select = interface()
 
     if select == 1:

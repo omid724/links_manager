@@ -22,12 +22,14 @@ def config_finder_constructor(path):
     return config1
 
 
-config = config_finder_constructor('adjust.conf')
+config = config_finder_constructor("adjust.conf")
+
 
 def make_requierd_dir(path, folder):
     requierd_dir = os.path.join(path, folder)
     if not os.path.isdir(requierd_dir):
         os.mkdir(requierd_dir)
+
 
 make_requierd_dir("", config["Logging"]["log_dir"])
 
@@ -36,9 +38,11 @@ def logger_constructor(name_of_module):
     logger1 = logging.getLogger(name_of_module)
     logger1.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
-    
-    log_file_path = os.path.join(config["Logging"]["log_dir"], config['Logging']['log_file'])
+    formatter = logging.Formatter("%(asctime)s:%(levelname)s:%(name)s:%(message)s")
+
+    log_file_path = os.path.join(
+        config["Logging"]["log_dir"], config["Logging"]["log_file"]
+    )
     file_handler = logging.FileHandler(log_file_path)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
@@ -64,35 +68,34 @@ def remove_last_forward_slash(url):
 
 def add_record_csv_file(information):
     with open("archive/neat_links.csv", mode="a") as urls_info_file:
-        fieldnames = ['address', 'title', 'group', 'tags', 'stars']
+        fieldnames = ["address", "title", "group", "tags", "stars"]
         url_info_writer = csv.DictWriter(urls_info_file, fieldnames=fieldnames)
 
         url_info_writer.writerow(information)
 
 
 def contain_random_string(s):
-    c = len(re.findall(r'\d[a-zA-Z]', s))
-    c += len(re.findall(r'[a-zA-Z]\d', s))
+    c = len(re.findall(r"\d[a-zA-Z]", s))
+    c += len(re.findall(r"[a-zA-Z]\d", s))
     result = True if c > 3 else False
     return result
 
 
 def get_all_exist_record():
     with open("archive/neat_links.csv", mode="r") as csv_file:
-        urls_info = csv.DictReader(csv_file, delimiter=',')
+        urls_info = csv.DictReader(csv_file, delimiter=",")
         urls_info = list(urls_info)
 
     return urls_info
 
 
 def bookmark_url(url):
-
     title = titleBug5(url)
     print("Computer find this title:", title)
     answer = input("Do you accept this? [Y]es or [N]o: ")
     if not (answer == "y" or answer == "Y"):
         title = input("Please enter a title: ")
-    with open('name_of_groups.json', 'r') as f:
+    with open("name_of_groups.json", "r") as f:
         text = f.read()
         print(text)
         groups = json.loads(text)
@@ -103,15 +106,14 @@ def bookmark_url(url):
     tags = []
     while True:
         tag = input()
-        if tag != '':
+        if tag != "":
             tags.append(tag)
         else:
             break
-            
-    tags_str = ''
+
+    tags_str = ""
     c = 0
     for tag in tags:
-            
         tags_str += "_t_" + tag
         c += 1
 
@@ -119,11 +121,11 @@ def bookmark_url(url):
     stars = int(stars)
 
     info = {
-        'address': url + " ",
-        'title': title,
-        'group': group,
-        'tags': tags_str,
-        'stars': stars
+        "address": url + " ",
+        "title": title,
+        "group": group,
+        "tags": tags_str,
+        "stars": stars,
     }
 
     add_record_csv_file(info)
@@ -137,13 +139,13 @@ def get_files_name_in_links_folder():
 
 
 def clear():
-    """ Clear the screen"""
+    """Clear the screen"""
     logger.info("Screen cleaned")
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def add_to_deactivate_list(url):
-    with open('deactive_urls.txt', 'a') as f:
+    with open("deactive_urls.txt", "a") as f:
         f.write(url + "\n")
 
 
@@ -151,7 +153,7 @@ def links_detector(file_path):
     """pass the function a file name,
     then you can have your all link in that file"""
 
-    with open(file_path, 'r', encoding='utf-8') as file5:
+    with open(file_path, "r", encoding="utf-8") as file5:
         total_file = file5.read()
 
     # https://gist.github.com/gruber/8891611
@@ -166,14 +168,14 @@ def links_detector_from_scv(file_path):
     logger.info("a csv file now scaning")
 
     df = pd.read_csv(file_path)
-    l=[]
-    d =  df.to_dict()
+    l = []
+    d = df.to_dict()
 
     for item in d:
-        column1 =  d[item]
+        column1 = d[item]
         for key in column1:
             filed = column1[key]
-            if isinstance(filed,str):
+            if isinstance(filed, str):
                 l.append(filed)
 
     total_file = "\n".join(l)
@@ -190,17 +192,22 @@ def get_all_urls_from_input_links_folder():
     all_url_exist_in_links_folder = []
     file_names = get_files_name_in_links_folder()
     input_links_path = os.path.relpath(config["Application"]["input_dir"])
-    
+
     # TODO - if our file is csv file should have another approach
     for file_name in file_names:
         if len(file_name) >= 5 and file_name[-4:] == ".csv":
-            all_url_exist_in_links_folder += links_detector_from_scv(os.path.join(input_links_path, file_name))
+            all_url_exist_in_links_folder += links_detector_from_scv(
+                os.path.join(input_links_path, file_name)
+            )
         else:
-            all_url_exist_in_links_folder += links_detector(os.path.join(input_links_path, file_name))
+            all_url_exist_in_links_folder += links_detector(
+                os.path.join(input_links_path, file_name)
+            )
 
     # Also add previous find links if exist file
-    first_table_find_urls = os.path.join(config["Application"]["input_dir"],
-                                         config["Application"]["first_table"])
+    first_table_find_urls = os.path.join(
+        config["Application"]["input_dir"], config["Application"]["first_table"]
+    )
     if os.path.isfile(first_table_find_urls):
         df = pd.read_csv(first_table_find_urls, index_col="Unnamed: 0")
         all_url_exist_in_links_folder += list(df.iloc[:, 0])
@@ -224,12 +231,12 @@ def get_other_shape(url):
 
     append_other_write(url)
 
-    if url[-1] == '/':
-        url_p = (url[:-1])
+    if url[-1] == "/":
+        url_p = url[:-1]
         l2.append(url_p)
         append_other_write(url_p)
     else:
-        url_p = (url + '/')
+        url_p = url + "/"
         l2.append(url_p)
         append_other_write(url_p)
 
@@ -238,7 +245,7 @@ def get_other_shape(url):
 
 def get_url_is_done(url):
     known_urls = []
-    for item in ['neat_links.csv', 'deactive_urls.txt']:
+    for item in ["neat_links.csv", "deactive_urls.txt"]:
         known_urls += links_detector(item)
 
     url_is_done = False
@@ -251,7 +258,7 @@ def get_url_is_done(url):
 
 def url_homework(url):
     clear()
-    if not len(re.findall(r'/', url)):
+    if not len(re.findall(r"/", url)):
         url = url + "/"
     print(url)
     answer = input("Do you may need this link? [Y]es or [N]o? ")
@@ -259,7 +266,7 @@ def url_homework(url):
         answer = input("Do you want to open the link? [Y]es or [N]o? ")
         if answer == "y" or answer == "Y":
             # webbrowser.open(url, new=0, autoraise=True)
-            os.system(f'firefox --safe-mode --new-tab {url}')
+            os.system(f"firefox --safe-mode --new-tab {url}")
         answer = input("Do you want to bookmark this? [Y]es or [N]o? ")
         if answer == "y" or answer == "Y":
             print("***bookmark***")
@@ -277,7 +284,7 @@ def link_lib_bug():
     urls = get_all_urls_from_input_links_folder()
 
     for url in urls:
-        root_url = re.findall(r'^.+?\..+?/', url)[0]
+        root_url = re.findall(r"^.+?\..+?/", url)[0]
         is_root = url == root_url
 
         url_is_done = get_url_is_done(url)
@@ -296,12 +303,21 @@ def link_lib_bug():
 
 
 def find_is_standard_pure_domain(x):
-    if len(re.findall(r'[^a-zA-Z0-9.-]', x)):
+    if len(re.findall(r"[^a-zA-Z0-9.-]", x)):
         result = False
     else:
-        result = False if x[0] == "." or x[-1] == "." or x.find("..") >= 0 or \
-                          x[0] == "-" or x[-1] == "-" or x.find("--") >= 0 or \
-                          len(x) == 0 or x.find(".") < 0 else True
+        result = (
+            False
+            if x[0] == "."
+            or x[-1] == "."
+            or x.find("..") >= 0
+            or x[0] == "-"
+            or x[-1] == "-"
+            or x.find("--") >= 0
+            or len(x) == 0
+            or x.find(".") < 0
+            else True
+        )
     return result
 
 
@@ -311,8 +327,14 @@ def split_protocol_part_of_url(url):
     assert number_of_parts <= 2, f"Not a normal link passed. url: {url}"
 
     protocol_part = splited_with_double_qute_url[0] if number_of_parts == 2 else ""
-    url_without_protocol = splited_with_double_qute_url[1] if number_of_parts == 2 else url
-    url_without_protocol = url_without_protocol[2:] if "//" == url_without_protocol[:2] else url_without_protocol
+    url_without_protocol = (
+        splited_with_double_qute_url[1] if number_of_parts == 2 else url
+    )
+    url_without_protocol = (
+        url_without_protocol[2:]
+        if "//" == url_without_protocol[:2]
+        else url_without_protocol
+    )
 
     return protocol_part, url_without_protocol
 
@@ -320,7 +342,7 @@ def split_protocol_part_of_url(url):
 def find_domain(url):
     url = url.lower()
     # input shape: https://tarh.ir/golha/ ---> output shape: https://tarh.ir/
-    res_url = re.findall(r'^.+?\..+?/', url)
+    res_url = re.findall(r"^.+?\..+?/", url)
     res_url = res_url[0] if len(res_url) else url
 
     return res_url
@@ -329,7 +351,7 @@ def find_domain(url):
 def find_pure_url(url):
     url = url.lower()
     # input shape: https://tarh.ir/golha/ ---> output shape: tarh.ir
-    res_url = re.findall(r'^.+?\..+?/', url)
+    res_url = re.findall(r"^.+?\..+?/", url)
     res_url = res_url[0] if len(res_url) else url
     protocol_part, res_url = split_protocol_part_of_url(res_url)
 
@@ -378,9 +400,15 @@ def make_first_table():
     df.insert(loc=1, column="protocol_part", value="NA")
     df.insert(loc=2, column="URL_without_protocol_part", value="NA")
     for index, row in df.iterrows():
-        protocol_part, url_without_protocol_part = split_protocol_part_of_url(row["URL"])
-        df.loc[index, "protocol_part"] = protocol_part
-        df.loc[index, "URL_without_protocol_part"] = url_without_protocol_part
+        try:
+            protocol_part, url_without_protocol_part = split_protocol_part_of_url(
+                row["URL"]
+            )
+        except Exception as e:
+            logger.error(f"Error: {str(e)}\nURL: {row['URL']}")
+        else:
+            df.loc[index, "protocol_part"] = protocol_part
+            df.loc[index, "URL_without_protocol_part"] = url_without_protocol_part
 
     df.sort_values(by="URL_without_protocol_part", ascending=True, inplace=True)
     df.reset_index(inplace=True)
@@ -413,7 +441,9 @@ def make_domains_table():
             df.loc[index, "URL_without_protocol_part"] = pure_domain
 
         df["URL"] = df["URL"].apply(remove_last_forward_slash)
-        df["URL_without_protocol_part"] = df["URL_without_protocol_part"].apply(remove_last_forward_slash)
+        df["URL_without_protocol_part"] = df["URL_without_protocol_part"].apply(
+            remove_last_forward_slash
+        )
 
         filt = df.duplicated()
         df.drop(index=df[filt].index, inplace=True)
@@ -472,7 +502,9 @@ def delete_first_table():
     first_table_path = os.path.join(config["Application"]["output_dir"], first_table)
 
     if os.path.isfile(first_table_path):
-        ans = ask_clint_yes_or_no("Are you sure to delete first table -previously find links? ")
+        ans = ask_clint_yes_or_no(
+            "Are you sure to delete first table -previously find links? "
+        )
         if ans:
             os.remove(first_table_path)
         print("First table file deleted")
@@ -480,9 +512,9 @@ def delete_first_table():
     else:
         print("First table file doesn't exist")
 
+
 # TODO --- make it complete
 def find_urls_all_need_context(link):
-
     """pass the function a link to find its title for you"""
 
     headers = {}
@@ -502,29 +534,29 @@ def find_urls_all_need_context(link):
     #    }
     try:
         total_page = requests.get(link, headers=headers, timeout=7)
-        
+
     except requests.exceptions.MissingSchema as e:
         logger.info(f"Couldn't find title for the link {link}\nthe error was {str(e)}")
-        total_text = ''
+        total_text = ""
 
     except requests.exceptions.ConnectionError as e:
         logger.info(f"Couldn't find title for the link {link}\nthe error was {str(e)}")
-        total_text = ''
+        total_text = ""
 
     else:
         total_text = total_page.text
 
-    total_page = re.sub(r'\n', '', total_text)
+    total_page = re.sub(r"\n", "", total_text)
 
-    title = re.findall(r'title>(.+?)</title', total_page)
+    title = re.findall(r"title>(.+?)</title", total_page)
     try:
         title = title[0].strip()
     except IndexError:
         print("Title didn't find.")
-        title = '---'
+        title = "---"
         # answer = input('Do you want try find title from url if it has unicode? [Y/N]? ')
         answer = "y"
         if answer == "y" or answer == "Y":
-            title = urllib.parse.unquote(link, encoding='utf-8', errors='replace')
+            title = urllib.parse.unquote(link, encoding="utf-8", errors="replace")
 
     return title
