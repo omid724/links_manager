@@ -11,3 +11,4 @@ Untitled.ipynb
 *.csv#
 Data/log/links_manager.log
 Data/output/
+.vscode/
