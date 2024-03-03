@@ -1,6 +1,7 @@
 .idea/
 __pycache__/
 trash/
+.ipynb_checkpoints/
 urls_info.csv
 deactive_urls.txt
 dev/varlogwr_file.txt
