@@ -1,21 +1,22 @@
-        In the name of God
+    In the name of God
 
-        Welcome to LINKS MANAGER
+    Welcome to LINKS MANAGER
 
-        Put all of your text file in "Data -> input" folder. These files if contain links
+    Put all of your text file in "Data -> input" folder. These files if contain links
     we try to find links and manage them.
-    acceptable formats (.csv, .htm, .html, .txt and plain text like,)
+    acceptable formats (.csv, .htm, .html, .txt and plain text)
 
     SELECT ONE OF OPTIONS.
 
-    (1) Make first table (What find in input with last exist links in "Data/output/first_table.csv"),
-    domain table (Domain part of links in first table) and
-    total table (Combine first_table with ) in input folder.
+    (1) Make first table (What find in input directory with including
+        last exist links in "Data/output/first_table.csv") and
+        domain table (Domain part of links in first table) and
+        total table (Combine first_table and domain table ) in output folder.
 
     (2) Delete previous first table -because find links in previous runs again consider,
-    if you don't need them, delete find links earlier.
+        if you don't need them, delete find links earlier.
 
-    (3)
+    (3) Preprocess total table and make neat table (under develop)
 
     (4)
 
